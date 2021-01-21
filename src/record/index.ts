@@ -1,4 +1,4 @@
-import { snapshot, MaskInputOptions, SlimDOMOptions } from 'rrweb-snapshot';
+import { snapshot, MaskInputOptions, SlimDOMOptions } from '@recordonce/rrweb-snapshot';
 import { initObservers, mutationBuffer } from './observer';
 import {
   mirror,
