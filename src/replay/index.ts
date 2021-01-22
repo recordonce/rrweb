@@ -123,6 +123,7 @@ export class Replayer {
       root: document.body,
       loadTimeout: 0,
       skipInactive: false,
+      skipMouseMove: false,
       showWarning: true,
       showDebug: false,
       blockClass: 'rr-block',

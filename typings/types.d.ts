@@ -343,6 +343,7 @@ export declare type playerConfig = {
     root: Element;
     loadTimeout: number;
     skipInactive: boolean;
+    skipMouseMove: boolean;
     showWarning: boolean;
     showDebug: boolean;
     blockClass: string;
