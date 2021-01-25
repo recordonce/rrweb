@@ -23,6 +23,7 @@ export declare class Replayer {
     on(event: string, handler: Handler): this;
     setConfig(config: Partial<playerConfig>): void;
     getMetaData(): playerMetaData;
+    getElement(event: eventWithTime): false | INode | null;
     getCurrentTime(): number;
     getTimeOffset(): number;
     play(timeOffset?: number): void;

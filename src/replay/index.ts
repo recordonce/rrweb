@@ -295,6 +295,21 @@ export class Replayer {
     };
   }
 
+  // getElement() was added by Justin (commit 114194144c3) for Record Once
+  public getElement(event: eventWithTime) {
+    if (event.type !== EventType.IncrementalSnapshot) {
+      return false;
+    }
+    if (
+      event.data.source === IncrementalSource.MouseInteraction
+      || event.data.source === IncrementalSource.Input
+    ) {
+      return mirror.getNode(event.data.id);
+    }
+
+    return false;
+  }
+
   public getCurrentTime(): number {
     return this.timer.timeOffset + this.getTimeOffset();
   }
