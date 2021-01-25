@@ -1,3 +1,4 @@
+import { INode } from '@recordonce/rrweb-snapshot';
 import { Timer } from './timer';
 import { createPlayerService, createSpeedService } from './machine';
 import { eventWithTime, playerConfig, playerMetaData, Handler } from '../types';
