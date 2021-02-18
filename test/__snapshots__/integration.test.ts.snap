@@ -1321,6 +1321,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"t\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -1330,6 +1331,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"te\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -1339,6 +1341,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"tes\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -1348,6 +1351,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"test\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -1397,6 +1401,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"on\\",
       \\"isChecked\\": true,
+      \\"userTriggered\\": true,
       \\"id\\": 27
     }
   },
@@ -1446,6 +1451,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"on\\",
       \\"isChecked\\": true,
+      \\"userTriggered\\": true,
       \\"id\\": 32
     }
   },
@@ -1471,6 +1477,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"t\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1480,6 +1487,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"te\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1489,6 +1497,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"tex\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1498,6 +1507,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"text\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1507,6 +1517,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"texta\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1516,6 +1527,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textar\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1525,6 +1537,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textare\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1534,6 +1547,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1543,6 +1557,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea \\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1552,6 +1567,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea t\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1561,6 +1577,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea te\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1570,6 +1587,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea tes\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1579,6 +1597,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea test\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -1588,6 +1607,7 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"1\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": false,
       \\"id\\": 42
     }
   }
@@ -2733,397 +2753,6 @@ exports[`log 1`] = `
                 \\"childNodes\\": [
                   {
                     \\"type\\": 3,
-                    \\"textContent\\": \\"\\\\n    \\",
-                    \\"id\\": 5
-                  },
-                  {
-                    \\"type\\": 2,
-                    \\"tagName\\": \\"meta\\",
-                    \\"attributes\\": {
-                      \\"charset\\": \\"UTF-8\\"
-                    },
-                    \\"childNodes\\": [],
-                    \\"id\\": 6
-                  },
-                  {
-                    \\"type\\": 3,
-                    \\"textContent\\": \\"\\\\n    \\",
-                    \\"id\\": 7
-                  },
-                  {
-                    \\"type\\": 2,
-                    \\"tagName\\": \\"meta\\",
-                    \\"attributes\\": {
-                      \\"name\\": \\"viewport\\",
-                      \\"content\\": \\"width=device-width, initial-scale=1.0\\"
-                    },
-                    \\"childNodes\\": [],
-                    \\"id\\": 8
-                  },
-                  {
-                    \\"type\\": 3,
-                    \\"textContent\\": \\"\\\\n    \\",
-                    \\"id\\": 9
-                  },
-                  {
-                    \\"type\\": 2,
-                    \\"tagName\\": \\"meta\\",
-                    \\"attributes\\": {
-                      \\"http-equiv\\": \\"X-UA-Compatible\\",
-                      \\"content\\": \\"ie=edge\\"
-                    },
-                    \\"childNodes\\": [],
-                    \\"id\\": 10
-                  },
-                  {
-                    \\"type\\": 3,
-                    \\"textContent\\": \\"\\\\n    \\",
-                    \\"id\\": 11
-                  },
-                  {
-                    \\"type\\": 2,
-                    \\"tagName\\": \\"title\\",
-                    \\"attributes\\": {},
-                    \\"childNodes\\": [
-                      {
-                        \\"type\\": 3,
-                        \\"textContent\\": \\"Log record\\",
-                        \\"id\\": 13
-                      }
-                    ],
-                    \\"id\\": 12
-                  },
-                  {
-                    \\"type\\": 3,
-                    \\"textContent\\": \\"\\\\n  \\",
-                    \\"id\\": 14
-                  }
-                ],
-                \\"id\\": 4
-              },
-              {
-                \\"type\\": 3,
-                \\"textContent\\": \\"\\\\n  \\",
-                \\"id\\": 15
-              },
-              {
-                \\"type\\": 2,
-                \\"tagName\\": \\"body\\",
-                \\"attributes\\": {},
-                \\"childNodes\\": [
-                  {
-                    \\"type\\": 3,
-                    \\"textContent\\": \\"\\\\n    \\",
-                    \\"id\\": 17
-                  },
-                  {
-                    \\"type\\": 2,
-                    \\"tagName\\": \\"script\\",
-                    \\"attributes\\": {},
-                    \\"childNodes\\": [
-                      {
-                        \\"type\\": 3,
-                        \\"textContent\\": \\"SCRIPT_PLACEHOLDER\\",
-                        \\"id\\": 19
-                      }
-                    ],
-                    \\"id\\": 18
-                  },
-                  {
-                    \\"type\\": 3,
-                    \\"textContent\\": \\"\\\\n    \\\\n    \\\\n\\\\n\\",
-                    \\"id\\": 20
-                  }
-                ],
-                \\"id\\": 16
-              }
-            ],
-            \\"id\\": 3
-          }
-        ],
-        \\"id\\": 1
-      },
-      \\"initialOffset\\": {
-        \\"left\\": 0,
-        \\"top\\": 0
-      }
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"assert\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:2:37\\"
-      ],
-      \\"payload\\": [
-        \\"true\\",
-        \\"\\\\\\"assert\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"count\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:3:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"count\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"countReset\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:4:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"count\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"debug\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:5:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"debug\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"dir\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:6:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"dir\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"dirxml\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:7:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"dirxml\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"group\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:8:37\\"
-      ],
-      \\"payload\\": []
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"groupCollapsed\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:9:37\\"
-      ],
-      \\"payload\\": []
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"info\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:10:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"info\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"log\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:11:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"log\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"table\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:12:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"table\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"time\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:13:37\\"
-      ],
-      \\"payload\\": []
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"timeEnd\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:14:37\\"
-      ],
-      \\"payload\\": []
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"timeLog\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:15:37\\"
-      ],
-      \\"payload\\": []
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"trace\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:16:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"trace\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"warn\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:17:37\\"
-      ],
-      \\"payload\\": [
-        \\"\\\\\\"warn\\\\\\"\\"
-      ]
-    }
-  },
-  {
-    \\"type\\": 3,
-    \\"data\\": {
-      \\"source\\": 11,
-      \\"level\\": \\"clear\\",
-      \\"trace\\": [
-        \\"__puppeteer_evalu\\",
-        \\"ion_script__:18:37\\"
-      ],
-      \\"payload\\": []
-    }
-  }
-]"
-`;
-
-exports[`mask 1`] = `
-"[
-  {
-    \\"type\\": 0,
-    \\"data\\": {}
-  },
-  {
-    \\"type\\": 1,
-    \\"data\\": {}
-  },
-  {
-    \\"type\\": 4,
-    \\"data\\": {
-      \\"href\\": \\"about:blank\\",
-      \\"width\\": 1920,
-      \\"height\\": 1080
-    }
-  },
-  {
-    \\"type\\": 2,
-    \\"data\\": {
-      \\"node\\": {
-        \\"type\\": 0,
-        \\"childNodes\\": [
-          {
-            \\"type\\": 1,
-            \\"name\\": \\"html\\",
-            \\"publicId\\": \\"\\",
-            \\"systemId\\": \\"\\",
-            \\"id\\": 2
-          },
-          {
-            \\"type\\": 2,
-            \\"tagName\\": \\"html\\",
-            \\"attributes\\": {
-              \\"lang\\": \\"en\\"
-            },
-            \\"childNodes\\": [
-              {
-                \\"type\\": 2,
-                \\"tagName\\": \\"head\\",
-                \\"attributes\\": {},
-                \\"childNodes\\": [
-                  {
-                    \\"type\\": 3,
                     \\"textContent\\": \\"\\\\n  \\",
                     \\"id\\": 5
                   },
@@ -3528,6 +3157,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"*\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -3537,6 +3167,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"**\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -3546,6 +3177,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"***\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -3555,6 +3187,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"****\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -3604,6 +3237,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"on\\",
       \\"isChecked\\": true,
+      \\"userTriggered\\": true,
       \\"id\\": 27
     }
   },
@@ -3653,6 +3287,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"on\\",
       \\"isChecked\\": true,
+      \\"userTriggered\\": true,
       \\"id\\": 32
     }
   },
@@ -3766,6 +3401,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"*\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3775,6 +3411,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"**\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3784,6 +3421,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"***\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3793,6 +3431,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"****\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3802,6 +3441,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"*****\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3811,6 +3451,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"******\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3820,6 +3461,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"*******\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3829,6 +3471,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"********\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3838,6 +3481,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"*********\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3847,6 +3491,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"**********\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3856,6 +3501,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"***********\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3865,6 +3511,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"************\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3874,6 +3521,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"*************\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -3883,6 +3531,7 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"*\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": false,
       \\"id\\": 42
     }
   }
@@ -4338,6 +3987,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"t\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -4347,6 +3997,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"te\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -4356,6 +4007,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"tes\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -4365,6 +4017,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"test\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -4414,6 +4067,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"on\\",
       \\"isChecked\\": true,
+      \\"userTriggered\\": true,
       \\"id\\": 27
     }
   },
@@ -4463,6 +4117,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"on\\",
       \\"isChecked\\": true,
+      \\"userTriggered\\": true,
       \\"id\\": 32
     }
   },
@@ -4488,6 +4143,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"t\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4497,6 +4153,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"te\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4506,6 +4163,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"tex\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4515,6 +4173,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"text\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4524,6 +4183,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"texta\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4533,6 +4193,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textar\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4542,6 +4203,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textare\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4551,6 +4213,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4560,6 +4223,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea \\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4569,6 +4233,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea t\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4578,6 +4243,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea te\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4587,6 +4253,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea tes\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4596,6 +4263,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"textarea test\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": true,
       \\"id\\": 37
     }
   },
@@ -4693,6 +4361,7 @@ exports[`maskInputOptions 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"1\\",
       \\"isChecked\\": false,
+      \\"userTriggered\\": false,
       \\"id\\": 42
     }
   }
