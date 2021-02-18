@@ -2754,9 +2754,9 @@ rollup@^2.3.3:
   optionalDependencies:
     fsevents "~2.1.2"
 
-rrweb-snapshot@Juice10/rrweb-snapshot#patch-1:
+rrweb-snapshot@Juice10/rrweb-snapshot#b682ca1c72b1ddee4abee4a5aad7b9d41d6d3574:
   version "1.0.7"
-  resolved "https://codeload.github.com/Juice10/rrweb-snapshot/tar.gz/dd811bcb6e24ad7e2f64f8dc336a986cea4507dc"
+  resolved "https://codeload.github.com/Juice10/rrweb-snapshot/tar.gz/b682ca1c72b1ddee4abee4a5aad7b9d41d6d3574"
 
 run-async@^2.2.0:
   version "2.4.1"
