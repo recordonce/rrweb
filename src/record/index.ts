@@ -69,7 +69,6 @@ function record<T = eventWithTime>(
           email: true,
           month: true,
           number: true,
-          password: true,
           range: true,
           search: true,
           tel: true,
