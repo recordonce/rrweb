@@ -5,6 +5,7 @@ import {
   MaskInputOptions,
   SlimDOMOptions,
   IGNORED_NODE,
+  NodeType,
 } from 'rrweb-snapshot';
 import {
   mutationRecord,
@@ -16,6 +17,7 @@ import {
   addedNodeMutation,
 } from '../types';
 import { mirror, isBlocked, isAncestorRemoved, isIgnored } from '../utils';
+import { IframeManager } from './iframe-manager';
 
 type DoubleLinkedListNode = {
   previous: DoubleLinkedListNode | null;
@@ -112,6 +114,7 @@ function isINode(n: Node | INode): n is INode {
  */
 export default class MutationBuffer {
   private frozen: boolean = false;
+  private locked: boolean = false;
 
   private texts: textCursor[] = [];
   private attributes: attributeCursor[] = [];
@@ -148,6 +151,9 @@ export default class MutationBuffer {
   private maskInputOptions: MaskInputOptions;
   private recordCanvas: boolean;
   private slimDOMOptions: SlimDOMOptions;
+  private doc: Document;
+
+  private iframeManager: IframeManager;
 
   public init(
     cb: mutationCallBack,
@@ -157,6 +163,8 @@ export default class MutationBuffer {
     maskInputOptions: MaskInputOptions,
     recordCanvas: boolean,
     slimDOMOptions: SlimDOMOptions,
+    doc: Document,
+    iframeManager: IframeManager,
   ) {
     this.blockClass = blockClass;
     this.blockSelector = blockSelector;
@@ -165,6 +173,8 @@ export default class MutationBuffer {
     this.recordCanvas = recordCanvas;
     this.slimDOMOptions = slimDOMOptions;
     this.emissionCallback = cb;
+    this.doc = doc;
+    this.iframeManager = iframeManager;
   }
 
   public freeze() {
@@ -173,20 +183,32 @@ export default class MutationBuffer {
 
   public unfreeze() {
     this.frozen = false;
+    this.emit();
   }
 
   public isFrozen() {
     return this.frozen;
   }
 
+  public lock() {
+    this.locked = true;
+  }
+
+  public unlock() {
+    this.locked = false;
+    this.emit();
+  }
+
   public processMutations = (mutations: mutationRecord[]) => {
     mutations.forEach(this.processMutation);
-    if (!this.frozen) {
-      this.emit();
-    }
+    this.emit();
   };
 
   public emit = () => {
+    if (this.frozen || this.locked) {
+      return;
+    }
+
     // delay any modification of the mirror until this function
     // so that the mirror for takeFullSnapshot doesn't get mutated while it's event is being processed
 
@@ -210,7 +232,7 @@ export default class MutationBuffer {
       return nextId;
     };
     const pushAdd = (n: Node) => {
-      if (!n.parentNode || !document.contains(n)) {
+      if (!n.parentNode || !this.doc.contains(n)) {
         return;
       }
       const parentId = mirror.getId((n.parentNode as Node) as INode);
@@ -219,7 +241,7 @@ export default class MutationBuffer {
         return addList.addNode(n);
       }
       let sn = serializeNodeWithId(n, {
-        doc: document,
+        doc: this.doc,
         map: mirror.map,
         blockClass: this.blockClass,
         blockSelector: this.blockSelector,
@@ -228,6 +250,19 @@ export default class MutationBuffer {
         maskInputOptions: this.maskInputOptions,
         slimDOMOptions: this.slimDOMOptions,
         recordCanvas: this.recordCanvas,
+        onSerialize: (currentN) => {
+          if (
+            currentN.__sn.type === NodeType.Element &&
+            currentN.__sn.tagName === 'iframe'
+          ) {
+            this.iframeManager.addIframe(
+              (currentN as unknown) as HTMLIFrameElement,
+            );
+          }
+        },
+        onIframeLoad: (iframe, childSn) => {
+          this.iframeManager.attachIframe(iframe, childSn);
+        },
       });
       if (sn) {
         adds.push({
@@ -378,7 +413,7 @@ export default class MutationBuffer {
         }
         // overwrite attribute if the mutations was triggered in same time
         item.attributes[m.attributeName!] = transformAttribute(
-          document,
+          this.doc,
           m.attributeName!,
           value!,
         );

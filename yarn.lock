@@ -2489,6 +2489,11 @@ preserve@^0.2.0:
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   integrity sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
 
+prettier@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.2.1.tgz#795a1a78dd52f073da0cd42b21f9c91381923ff5"
+  integrity sha512-PqyhM2yCjg/oKkFPtTGUojv7gnZAoG80ttl45O6x2Ug/rMJw4wcc9k6aaf2hibP7BGVCCM33gZoGjyvt9mm16Q==
+
 pretty-format@^23.6.0:
   version "23.6.0"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-23.6.0.tgz#5eaac8eeb6b33b987b7fe6097ea6a8a146ab5760"
@@ -2749,10 +2754,10 @@ rollup@^2.3.3:
   optionalDependencies:
     fsevents "~2.1.2"
 
-rrweb-snapshot@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/rrweb-snapshot/-/rrweb-snapshot-1.0.2.tgz#0338c9e00e24e86f8efb56cbdb293def7287f53c"
-  integrity sha512-QtWwK9fqNLn1wn7nupyy/BcTnMfl8rrtG6uQ0pC3xeXskVQ9GXuh/ulEpuzyVIVPszF/AvT4DjfWmwC5K6xusA==
+rrweb-snapshot@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/rrweb-snapshot/-/rrweb-snapshot-1.0.7.tgz#9d334590089af4a857970ef4e9e978d986a122d1"
+  integrity sha512-6fu9+KiQlFPkFk2SdahIDsV+yu1juiAR/o+kOiwKPbXur1TiFGMPAfaQNCkqLc8Nvyx3ItkJmrIldyxnAalEag==
 
 run-async@^2.2.0:
   version "2.4.1"
