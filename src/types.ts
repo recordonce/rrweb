@@ -444,7 +444,6 @@ export type inputValue = {
   text?: string;
   isChecked?: boolean;
   key?: string;
-  rrwebGenerated: boolean;
 };
 
 export type inputCallback = (v: inputValue & { id: number }) => void;

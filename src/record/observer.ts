@@ -289,8 +289,6 @@ function initInputObserver(
 ): listenerHandler {
   function eventHandler(event: KeyboardEvent) { // was Event
     const { target } = event;
-    const rrwebGenerated = !event.isTrusted;
-
     if (
       !target ||
       !(target as Element).tagName ||
@@ -301,7 +299,7 @@ function initInputObserver(
     }
 
     if (event.type === 'keyup' && event.key === 'Enter') {
-      return cbWithDedup(target, { key: 'Enter', rrwebGenerated });
+      return cbWithDedup(target, { key: 'Enter' });
     }
 
     const type: string | undefined = (target as HTMLInputElement).type;
@@ -324,7 +322,7 @@ function initInputObserver(
         text = '*'.repeat(text.length);
       }
     }
-    cbWithDedup(target, { text, isChecked, rrwebGenerated });
+    cbWithDedup(target, { text, isChecked });
     // if a radio was checked
     // the other radios with the same name attribute will be unchecked.
     const name: string | undefined = (target as HTMLInputElement).name;
@@ -336,7 +334,6 @@ function initInputObserver(
             cbWithDedup(el, {
               text: (el as HTMLInputElement).value,
               isChecked: !isChecked,
-              rrwebGenerated: true,
             });
           }
         });
