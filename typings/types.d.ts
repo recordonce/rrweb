@@ -313,10 +313,9 @@ export declare type viewportResizeDimension = {
 };
 export declare type viewportResizeCallback = (d: viewportResizeDimension) => void;
 export declare type inputValue = {
-    text?: string;
-    isChecked?: boolean;
-    key?: string;
-    rrwebGenerated: boolean;
+    text: string;
+    isChecked: boolean;
+    userTriggered: boolean;
 };
 export declare type inputCallback = (v: inputValue & {
     id: number;
