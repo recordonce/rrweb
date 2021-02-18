@@ -43,18 +43,32 @@ import {
 } from '../types';
 import MutationBuffer from './mutation';
 import { stringify } from './stringify';
+import { IframeManager } from './iframe-manager';
 
-export const mutationBuffer = new MutationBuffer();
+type WindowWithStoredMutationObserver = Window & {
+  __rrMutationObserver?: MutationObserver;
+};
+type WindowWithAngularZone = Window & {
+  Zone?: {
+    __symbol__?: (key: string) => string;
+  };
+};
+
+export const mutationBuffers: MutationBuffer[] = [];
 
 function initMutationObserver(
   cb: mutationCallBack,
+  doc: Document,
   blockClass: blockClass,
   blockSelector: string | null,
   inlineStylesheet: boolean,
   maskInputOptions: MaskInputOptions,
   recordCanvas: boolean,
   slimDOMOptions: SlimDOMOptions,
+  iframeManager: IframeManager,
 ): MutationObserver {
+  const mutationBuffer = new MutationBuffer();
+  mutationBuffers.push(mutationBuffer);
   // see mutation.ts for details
   mutationBuffer.init(
     cb,
@@ -64,11 +78,38 @@ function initMutationObserver(
     maskInputOptions,
     recordCanvas,
     slimDOMOptions,
+    doc,
+    iframeManager,
   );
-  const observer = new MutationObserver(
+  let mutationObserverCtor =
+    window.MutationObserver ||
+    /**
+     * Some websites may disable MutationObserver by removing it from the window object.
+     * If someone is using rrweb to build a browser extention or things like it, they
+     * could not change the website's code but can have an opportunity to inject some
+     * code before the website executing its JS logic.
+     * Then they can do this to store the native MutationObserver:
+     * window.__rrMutationObserver = MutationObserver
+     */
+    (window as WindowWithStoredMutationObserver).__rrMutationObserver;
+  const angularZoneSymbol = (window as WindowWithAngularZone)?.Zone?.__symbol__?.(
+    'MutationObserver',
+  );
+  if (
+    angularZoneSymbol &&
+    ((window as unknown) as Record<string, typeof MutationObserver>)[
+      angularZoneSymbol
+    ]
+  ) {
+    mutationObserverCtor = ((window as unknown) as Record<
+      string,
+      typeof MutationObserver
+    >)[angularZoneSymbol];
+  }
+  const observer = new mutationObserverCtor(
     mutationBuffer.processMutations.bind(mutationBuffer),
   );
-  observer.observe(document, {
+  observer.observe(doc, {
     attributes: true,
     attributeOldValue: true,
     characterData: true,
@@ -82,6 +123,7 @@ function initMutationObserver(
 function initMoveObserver(
   cb: mousemoveCallBack,
   sampling: SamplingStrategy,
+  doc: Document,
 ): listenerHandler {
   if (sampling.mousemove === false) {
     return () => {};
@@ -127,8 +169,8 @@ function initMoveObserver(
     },
   );
   const handlers = [
-    on('mousemove', updatePosition),
-    on('touchmove', updatePosition),
+    on('mousemove', updatePosition, doc),
+    on('touchmove', updatePosition, doc),
   ];
   return () => {
     handlers.forEach((h) => h());
@@ -137,6 +179,7 @@ function initMoveObserver(
 
 function initMouseInteractionObserver(
   cb: mouseInteractionCallBack,
+  doc: Document,
   blockClass: blockClass,
   sampling: SamplingStrategy,
 ): listenerHandler {
@@ -177,7 +220,7 @@ function initMouseInteractionObserver(
     .forEach((eventKey: keyof typeof MouseInteractions) => {
       const eventName = eventKey.toLowerCase();
       const handler = getHandler(eventKey);
-      handlers.push(on(eventName, handler));
+      handlers.push(on(eventName, handler, doc));
     });
   return () => {
     handlers.forEach((h) => h());
@@ -186,6 +229,7 @@ function initMouseInteractionObserver(
 
 function initScrollObserver(
   cb: scrollCallback,
+  doc: Document,
   blockClass: blockClass,
   sampling: SamplingStrategy,
 ): listenerHandler {
@@ -194,8 +238,8 @@ function initScrollObserver(
       return;
     }
     const id = mirror.getId(evt.target as INode);
-    if (evt.target === document) {
-      const scrollEl = (document.scrollingElement || document.documentElement)!;
+    if (evt.target === doc) {
+      const scrollEl = (doc.scrollingElement || doc.documentElement)!;
       cb({
         id,
         x: scrollEl.scrollLeft,
@@ -236,6 +280,7 @@ export const INPUT_TAGS = ['INPUT', 'TEXTAREA', 'SELECT'];
 const lastInputValueMap: WeakMap<EventTarget, inputValue> = new WeakMap();
 function initInputObserver(
   cb: inputCallback,
+  doc: Document,
   blockClass: blockClass,
   ignoreClass: string,
   maskInputOptions: MaskInputOptions,
@@ -286,7 +331,7 @@ function initInputObserver(
     // the other radios with the same name attribute will be unchecked.
     const name: string | undefined = (target as HTMLInputElement).name;
     if (type === 'radio' && name && isChecked) {
-      document
+      doc
         .querySelectorAll(`input[type="radio"][name="${name}"]`)
         .forEach((el) => {
           if (el !== target) {
@@ -318,7 +363,7 @@ function initInputObserver(
   const events = sampling.input === 'last' ? ['change'] : ['input', 'change'];
   const handlers: Array<
     listenerHandler | hookResetter
-  > = events.map((eventName) => on(eventName, eventHandler));
+  > = events.map((eventName) => on(eventName, eventHandler, doc));
   const propertyDescriptor = Object.getOwnPropertyDescriptor(
     HTMLInputElement.prototype,
     'value',
@@ -701,27 +746,32 @@ export function initObservers(
   mergeHooks(o, hooks);
   const mutationObserver = initMutationObserver(
     o.mutationCb,
+    o.doc,
     o.blockClass,
     o.blockSelector,
     o.inlineStylesheet,
     o.maskInputOptions,
     o.recordCanvas,
     o.slimDOMOptions,
+    o.iframeManager,
   );
-  const mousemoveHandler = initMoveObserver(o.mousemoveCb, o.sampling);
+  const mousemoveHandler = initMoveObserver(o.mousemoveCb, o.sampling, o.doc);
   const mouseInteractionHandler = initMouseInteractionObserver(
     o.mouseInteractionCb,
+    o.doc,
     o.blockClass,
     o.sampling,
   );
   const scrollHandler = initScrollObserver(
     o.scrollCb,
+    o.doc,
     o.blockClass,
     o.sampling,
   );
   const viewportResizeHandler = initViewportResizeObserver(o.viewportResizeCb);
   const inputHandler = initInputObserver(
     o.inputCb,
+    o.doc,
     o.blockClass,
     o.ignoreClass,
     o.maskInputOptions,
