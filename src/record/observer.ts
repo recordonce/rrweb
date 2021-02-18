@@ -305,10 +305,7 @@ function initInputObserver(
     }
 
     const type: string | undefined = (target as HTMLInputElement).type;
-    if (
-      type === 'password' ||
-      (target as HTMLElement).classList.contains(ignoreClass)
-    ) {
+    if ((target as HTMLElement).classList.contains(ignoreClass)) {
       return;
     }
     let text = (target as HTMLInputElement).value;
