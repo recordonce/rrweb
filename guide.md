@@ -161,7 +161,7 @@ You may find some contents on the webpage which are not willing to be recorded, 
 
 - An element with the class name `.rr-block` will not be recorded. Instead, it will replay as a placeholder with the same dimension.
 - An element with the class name `.rr-ignore` will not record its input events.
-- `input[type="password"]` will be ignored as default.
+- You’ll probably want to mask `input[type="password"]` by adding `maskInputOptions: {password: true}`
 - Mask options to mask the content in input elements.
 
 #### Checkout

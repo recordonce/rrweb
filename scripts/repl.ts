@@ -100,7 +100,8 @@ function getCode(): string {
       rrweb.record({
         emit: event => window._replLog(event),
         recordCanvas: true,
-        collectFonts: true
+        collectFonts: true,
+        maskInputOptions: { password: true }
       });
     `);
     page.on('framenavigated', async () => {
@@ -111,7 +112,8 @@ function getCode(): string {
           rrweb.record({
             emit: event => window._replLog(event),
             recordCanvas: true,
-            collectFonts: true
+            collectFonts: true,
+            maskInputOptions: { password: true }
           });
         `);
       }

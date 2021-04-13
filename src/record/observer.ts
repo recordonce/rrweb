@@ -312,8 +312,10 @@ function initInputObserver(
   maskInputFn: MaskInputFn | undefined,
   sampling: SamplingStrategy,
 ): listenerHandler {
-  function eventHandler(event: Event) {
+  function eventHandler(event: KeyboardEvent) { // was Event
     const { target } = event;
+    const rrwebGenerated = !event.isTrusted;
+
     if (
       !target ||
       !(target as Element).tagName ||
@@ -322,9 +324,13 @@ function initInputObserver(
     ) {
       return;
     }
+
+    if (event.type === 'keyup' && event.key === 'Enter') {
+      return cbWithDedup(target, { key: 'Enter', rrwebGenerated });
+    }
+
     const type: string | undefined = (target as HTMLInputElement).type;
     if (
-      type === 'password' ||
       (target as HTMLElement).classList.contains(ignoreClass)
     ) {
       return;
@@ -345,7 +351,7 @@ function initInputObserver(
         text = '*'.repeat(text.length);
       }
     }
-    cbWithDedup(target, { text, isChecked });
+    cbWithDedup(target, { text, isChecked, rrwebGenerated });
     // if a radio was checked
     // the other radios with the same name attribute will be unchecked.
     const name: string | undefined = (target as HTMLInputElement).name;
@@ -357,6 +363,7 @@ function initInputObserver(
             cbWithDedup(el, {
               text: (el as HTMLInputElement).value,
               isChecked: !isChecked,
+              rrwebGenerated: true,
             });
           }
         });
@@ -367,7 +374,8 @@ function initInputObserver(
     if (
       !lastInputValue ||
       lastInputValue.text !== v.text ||
-      lastInputValue.isChecked !== v.isChecked
+      lastInputValue.isChecked !== v.isChecked ||
+      lastInputValue.key !== v.key
     ) {
       lastInputValueMap.set(target, v);
       const id = mirror.getId(target as INode);
@@ -399,7 +407,7 @@ function initInputObserver(
         hookSetter<HTMLElement>(p[0], p[1], {
           set() {
             // mock to a normal event
-            eventHandler({ target: this } as Event);
+            eventHandler({ target: this } as KeyboardEvent); // was Event
           },
         }),
       ),
