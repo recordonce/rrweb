@@ -491,6 +491,7 @@ export type Mirror = {
   getNode: (id: number) => INode | null;
   removeNodeFromMap: (n: INode) => void;
   has: (id: number) => boolean;
+  reset: () => void;
 };
 
 export type throttleOptions = {
@@ -579,6 +580,7 @@ export enum ReplayerEvents {
   CustomEvent = 'custom-event',
   Flush = 'flush',
   StateChange = 'state-change',
+  PlayBack = 'play-back',
 }
 
 export type MaskInputFn = (text: string) => string;
