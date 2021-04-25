@@ -244,6 +244,7 @@ function initInputObserver(
 ): listenerHandler {
   function eventHandler(event: Event) {
     const { target } = event;
+    const userTriggered = event.isTrusted;
     if (
       !target ||
       !(target as Element).tagName ||
@@ -253,10 +254,7 @@ function initInputObserver(
       return;
     }
     const type: string | undefined = (target as HTMLInputElement).type;
-    if (
-      type === 'password' ||
-      (target as HTMLElement).classList.contains(ignoreClass)
-    ) {
+    if ((target as HTMLElement).classList.contains(ignoreClass)) {
       return;
     }
     let text = (target as HTMLInputElement).value;
@@ -275,7 +273,7 @@ function initInputObserver(
         text = '*'.repeat(text.length);
       }
     }
-    cbWithDedup(target, { text, isChecked });
+    cbWithDedup(target, { text, isChecked, userTriggered });
     // if a radio was checked
     // the other radios with the same name attribute will be unchecked.
     const name: string | undefined = (target as HTMLInputElement).name;
@@ -287,6 +285,7 @@ function initInputObserver(
             cbWithDedup(el, {
               text: (el as HTMLInputElement).value,
               isChecked: !isChecked,
+              userTriggered: false,
             });
           }
         });
