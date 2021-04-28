@@ -40,6 +40,7 @@ import {
   AppendedIframe,
   isIframeINode,
   getBaseDimension,
+  hasShadowRoot,
 } from '../utils';
 import getInjectStyleRules from './styles/inject-style';
 import './styles/style.css';
@@ -52,7 +53,11 @@ const SKIP_TIME_INTERVAL = 5 * 1000;
 const mitt = (mittProxy as any).default || mittProxy;
 
 const REPLAY_CONSOLE_PREFIX = '[replayer]';
-const SCROLL_ATTRIBUTE_NAME = '__rrweb_scroll__';
+const ORIGINAL_ATTRIBUTE_NAME = '__rrweb_original__';
+
+type PatchedConsoleLog = {
+  [ORIGINAL_ATTRIBUTE_NAME]: typeof console.log;
+};
 
 const defaultMouseTailConfig = {
   duration: 500,
@@ -115,6 +120,9 @@ export class Replayer {
 
   private imageMap: Map<eventWithTime, HTMLImageElement> = new Map();
 
+  /** The first time the player is playing. */
+  private firstPlayedEvent: eventWithTime | null = null;
+
   private newDocumentQueue: addedNodeMutation[] = [];
 
   constructor(
@@ -126,6 +134,7 @@ export class Replayer {
     }
     const defaultConfig: playerConfig = {
       speed: 1,
+      maxSpeed: 360,
       root: document.body,
       loadTimeout: 0,
       skipInactive: false,
@@ -141,8 +150,9 @@ export class Replayer {
       logConfig: defaultLogConfig,
     };
     this.config = Object.assign({}, defaultConfig, config);
-    if (!this.config.logConfig.replayLogger)
+    if (!this.config.logConfig.replayLogger) {
       this.config.logConfig.replayLogger = this.getConsoleLogger();
+    }
 
     this.handleResize = this.handleResize.bind(this);
     this.getCastFn = this.getCastFn.bind(this);
@@ -183,16 +193,22 @@ export class Replayer {
         this.applyInput(d);
       }
     });
+    this.emitter.on(ReplayerEvents.PlayBack, () => {
+      this.firstPlayedEvent = null;
+      mirror.reset();
+    });
 
     const timer = new Timer([], config?.speed || defaultConfig.speed);
     this.service = createPlayerService(
       {
-        events: events.map((e) => {
-          if (config && config.unpackFn) {
-            return config.unpackFn(e as string);
-          }
-          return e as eventWithTime;
-        }),
+        events: events
+          .map((e) => {
+            if (config && config.unpackFn) {
+              return config.unpackFn(e as string);
+            }
+            return e as eventWithTime;
+          })
+          .sort((a1, a2) => a1.timestamp - a2.timestamp),
         timer,
         timeOffset: 0,
         baselineTime: 0,
@@ -240,9 +256,10 @@ export class Replayer {
     if (firstFullsnapshot) {
       setTimeout(() => {
         // when something has been played, there is no need to rebuild poster
-        if (this.timer.timeOffset > 0) {
+        if (this.firstPlayedEvent) {
           return;
         }
+        this.firstPlayedEvent = firstFullsnapshot;
         this.rebuildFullSnapshot(
           firstFullsnapshot as fullSnapshotEvent & { timestamp: number },
         );
@@ -452,6 +469,10 @@ export class Replayer {
         break;
       case EventType.FullSnapshot:
         castFn = () => {
+          // Don't build a full snapshot during the first play through since we've already built it when the player was mounted.
+          if (this.firstPlayedEvent && this.firstPlayedEvent === event) {
+            return;
+          }
           this.rebuildFullSnapshot(event, isSync);
           this.iframe.contentWindow!.scrollTo(event.data.initialOffset);
         };
@@ -487,7 +508,10 @@ export class Replayer {
               const skipTime =
                 this.nextUserInteractionEvent.delay! - event.delay!;
               const payload = {
-                speed: Math.min(Math.round(skipTime / SKIP_TIME_INTERVAL), 360),
+                speed: Math.min(
+                  Math.round(skipTime / SKIP_TIME_INTERVAL),
+                  this.config.maxSpeed,
+                ),
               };
               this.speedService.send({ type: 'FAST_FORWARD', payload });
               this.emitter.emit(ReplayerEvents.SkipStart, payload);
@@ -502,6 +526,8 @@ export class Replayer {
         castFn();
       }
       this.service.send({ type: 'CAST_EVENT', payload: { event } });
+
+      // events are kept sorted by timestamp, check if this is the last event
       if (
         event ===
         this.service.state.context.events[
@@ -1020,8 +1046,9 @@ export class Replayer {
         try {
           const logData = e.data as logData;
           const replayLogger = this.config.logConfig.replayLogger!;
-          if (typeof replayLogger[logData.level] === 'function')
+          if (typeof replayLogger[logData.level] === 'function') {
             replayLogger[logData.level]!(logData);
+          }
         } catch (error) {
           if (this.config.showWarning) {
             console.warn(error);
@@ -1038,14 +1065,18 @@ export class Replayer {
       if (!target) {
         return this.warnNodeNotFound(d, mutation.id);
       }
-      const parent = mirror.getNode(mutation.parentId);
+      let parent: INode | null | ShadowRoot = mirror.getNode(mutation.parentId);
       if (!parent) {
         return this.warnNodeNotFound(d, mutation.parentId);
+      }
+      if (mutation.isShadow && hasShadowRoot(parent)) {
+        parent = parent.shadowRoot;
       }
       // target may be removed with its parents before
       mirror.removeNodeFromMap(target);
       if (parent) {
-        const realParent = this.fragmentParentMap.get(parent);
+        const realParent =
+          '__sn' in parent ? this.fragmentParentMap.get(parent) : undefined;
         if (realParent && realParent.contains(target)) {
           realParent.removeChild(target);
         } else if (this.fragmentParentMap.has(target)) {
@@ -1090,7 +1121,7 @@ export class Replayer {
       if (!this.iframe.contentDocument) {
         return console.warn('Looks like your replayer has been destroyed.');
       }
-      let parent = mirror.getNode(mutation.parentId);
+      let parent: INode | null | ShadowRoot = mirror.getNode(mutation.parentId);
       if (!parent) {
         if (mutation.node.type === NodeType.Document) {
           // is newly added document, maybe the document node of an iframe
@@ -1108,7 +1139,8 @@ export class Replayer {
         parentInDocument = this.iframe.contentDocument.body.contains(parent);
       }
 
-      if (useVirtualParent && parentInDocument) {
+      // if parent element is an iframe, iframe document can't be appended to virtual parent
+      if (useVirtualParent && parentInDocument && !isIframeINode(parent)) {
         const virtualParent = (document.createDocumentFragment() as unknown) as INode;
         mirror.map[mutation.parentId] = virtualParent;
         this.fragmentParentMap.set(virtualParent, parent);
@@ -1120,6 +1152,10 @@ export class Replayer {
           virtualParent.appendChild(parent.firstChild);
         }
         parent = virtualParent;
+      }
+
+      if (mutation.node.isShadow && hasShadowRoot(parent)) {
+        parent = parent.shadowRoot;
       }
 
       let previous: Node | null = null;
@@ -1170,6 +1206,15 @@ export class Replayer {
           ? parent.insertBefore(target, next)
           : parent.insertBefore(target, null);
       } else {
+        /**
+         * Sometimes the document changes and the MutationObserver is disconnected, so the removal of child elements can't be detected and recorded. After the change of document, we may get another mutation which adds a new html element, while the old html element still exists in the dom, and we need to remove the old html element first to avoid collision.
+         */
+        if (parent === targetDoc) {
+          while (targetDoc.firstChild) {
+            targetDoc.removeChild(targetDoc.firstChild);
+          }
+        }
+
         parent.appendChild(target);
       }
 
@@ -1319,7 +1364,9 @@ export class Replayer {
    * @param data the log data
    */
   private formatMessage(data: logData): string {
-    if (data.trace.length === 0) return '';
+    if (data.trace.length === 0) {
+      return '';
+    }
     const stackPrefix = '\n\tat ';
     let result = stackPrefix;
     result += data.trace.join(stackPrefix);
@@ -1330,29 +1377,38 @@ export class Replayer {
    * generate a console log replayer which implement the interface ReplayLogger
    */
   private getConsoleLogger(): ReplayLogger {
-    const rrwebOriginal = SCROLL_ATTRIBUTE_NAME;
     const replayLogger: ReplayLogger = {};
-    for (const level of this.config.logConfig.level!)
-      if (level === 'trace')
+    for (const level of this.config.logConfig.level!) {
+      if (level === 'trace') {
         replayLogger[level] = (data: logData) => {
-          const logger = (console.log as any)[rrwebOriginal]
-            ? (console.log as any)[rrwebOriginal]
+          const logger = ((console.log as unknown) as PatchedConsoleLog)[
+            ORIGINAL_ATTRIBUTE_NAME
+          ]
+            ? ((console.log as unknown) as PatchedConsoleLog)[
+                ORIGINAL_ATTRIBUTE_NAME
+              ]
             : console.log;
           logger(
             ...data.payload.map((s) => JSON.parse(s)),
             this.formatMessage(data),
           );
         };
-      else
+      } else {
         replayLogger[level] = (data: logData) => {
-          const logger = (console[level] as any)[rrwebOriginal]
-            ? (console[level] as any)[rrwebOriginal]
+          const logger = ((console[level] as unknown) as PatchedConsoleLog)[
+            ORIGINAL_ATTRIBUTE_NAME
+          ]
+            ? ((console[level] as unknown) as PatchedConsoleLog)[
+                ORIGINAL_ATTRIBUTE_NAME
+              ]
             : console[level];
           logger(
             ...data.payload.map((s) => JSON.parse(s)),
             this.formatMessage(data),
           );
         };
+      }
+    }
     return replayLogger;
   }
 
@@ -1391,9 +1447,9 @@ export class Replayer {
       return this.debugNodeNotFound(d, id);
     }
 
-    const base = getBaseDimension(target);
-    const _x = x + base.x;
-    const _y = y + base.y;
+    const base = getBaseDimension(target, this.iframe);
+    const _x = x * base.absoluteScale + base.x;
+    const _y = y * base.absoluteScale + base.y;
 
     this.mouse.style.left = `${_x}px`;
     this.mouse.style.top = `${_y}px`;

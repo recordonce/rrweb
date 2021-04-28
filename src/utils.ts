@@ -21,6 +21,7 @@ import {
   IGNORED_NODE,
   serializedNodeWithId,
   NodeType,
+  isShadowRoot,
 } from 'rrweb-snapshot';
 
 export function on(
@@ -57,6 +58,9 @@ export const mirror: Mirror = {
   },
   has(id) {
     return mirror.map.hasOwnProperty(id);
+  },
+  reset() {
+    mirror.map = {};
   },
 };
 
@@ -213,6 +217,9 @@ export function isIgnored(n: Node | INode): boolean {
 }
 
 export function isAncestorRemoved(target: INode): boolean {
+  if (isShadowRoot(target)) {
+    return false;
+  }
   const id = mirror.getId(target);
   if (!mirror.has(id)) {
     return true;
@@ -542,27 +549,50 @@ export type AppendedIframe = {
   builtNode: HTMLIFrameINode;
 };
 
-export function isIframeINode(node: INode): node is HTMLIFrameINode {
-  // node can be document fragment when using the virtual parent feature
-  if (!node.__sn) {
-    return false;
+export function isIframeINode(
+  node: INode | ShadowRoot,
+): node is HTMLIFrameINode {
+  if ('__sn' in node) {
+    return (
+      node.__sn.type === NodeType.Element && node.__sn.tagName === 'iframe'
+    );
   }
-  return node.__sn.type === NodeType.Element && node.__sn.tagName === 'iframe';
+  // node can be document fragment when using the virtual parent feature
+  return false;
 }
 
-export function getBaseDimension(node: Node): DocumentDimension {
+export function getBaseDimension(
+  node: Node,
+  rootIframe: Node,
+): DocumentDimension {
   const frameElement = node.ownerDocument?.defaultView?.frameElement;
-  if (!frameElement) {
+  if (!frameElement || frameElement === rootIframe) {
     return {
       x: 0,
       y: 0,
+      relativeScale: 1,
+      absoluteScale: 1,
     };
   }
 
   const frameDimension = frameElement.getBoundingClientRect();
-  const frameBaseDimension = getBaseDimension(frameElement);
+  const frameBaseDimension = getBaseDimension(frameElement, rootIframe);
+  // the iframe element may have a scale transform
+  const relativeScale = frameDimension.height / frameElement.clientHeight;
   return {
-    x: frameDimension.x + frameBaseDimension.x,
-    y: frameDimension.y + frameBaseDimension.y,
+    x:
+      frameDimension.x * frameBaseDimension.relativeScale +
+      frameBaseDimension.x,
+    y:
+      frameDimension.y * frameBaseDimension.relativeScale +
+      frameBaseDimension.y,
+    relativeScale,
+    absoluteScale: frameBaseDimension.absoluteScale * relativeScale,
   };
+}
+
+export function hasShadowRoot<T extends Node>(
+  n: T,
+): n is T & { shadowRoot: ShadowRoot } {
+  return Boolean(((n as unknown) as Element)?.shadowRoot);
 }

@@ -7,6 +7,7 @@ import {
   getWindowHeight,
   polyfill,
   isIframeINode,
+  hasShadowRoot,
 } from '../utils';
 import {
   EventType,
@@ -16,8 +17,10 @@ import {
   IncrementalSource,
   listenerHandler,
   LogRecordOptions,
+  mutationCallbackParam,
 } from '../types';
 import { IframeManager } from './iframe-manager';
+import { ShadowDomManager } from './shadow-dom-manager';
 
 function wrapEvent(e: event): eventWithTime {
   return {
@@ -27,6 +30,8 @@ function wrapEvent(e: event): eventWithTime {
 }
 
 let wrappedEmit!: (e: eventWithTime, isCheckout?: boolean) => void;
+
+let takeFullSnapshot!: (isCheckout?: boolean) => void;
 
 function record<T = eventWithTime>(
   options: recordOptions<T> = {},
@@ -38,11 +43,14 @@ function record<T = eventWithTime>(
     blockClass = 'rr-block',
     blockSelector = null,
     ignoreClass = 'rr-ignore',
+    maskTextClass = 'rr-mask',
+    maskTextSelector = null,
     inlineStylesheet = true,
     maskAllInputs,
     maskInputOptions: _maskInputOptions,
     slimDOMOptions: _slimDOMOptions,
     maskInputFn,
+    maskTextFn,
     hooks,
     packFn,
     sampling = {},
@@ -158,6 +166,14 @@ function record<T = eventWithTime>(
       lastFullSnapshotEvent = e;
       incrementalSnapshotCount = 0;
     } else if (e.type === EventType.IncrementalSnapshot) {
+      // attch iframe should be considered as full snapshot
+      if (
+        e.data.source === IncrementalSource.Mutation &&
+        e.data.isAttachIframe
+      ) {
+        return;
+      }
+
       incrementalSnapshotCount++;
       const exceedCount =
         checkoutEveryNth && incrementalSnapshotCount >= checkoutEveryNth;
@@ -170,20 +186,39 @@ function record<T = eventWithTime>(
     }
   };
 
+  const wrappedMutationEmit = (m: mutationCallbackParam) => {
+    wrappedEmit(
+      wrapEvent({
+        type: EventType.IncrementalSnapshot,
+        data: {
+          source: IncrementalSource.Mutation,
+          ...m,
+        },
+      }),
+    );
+  };
+
   const iframeManager = new IframeManager({
-    mutationCb: (m) =>
-      wrappedEmit(
-        wrapEvent({
-          type: EventType.IncrementalSnapshot,
-          data: {
-            source: IncrementalSource.Mutation,
-            ...m,
-          },
-        }),
-      ),
+    mutationCb: wrappedMutationEmit,
   });
 
-  function takeFullSnapshot(isCheckout = false) {
+  const shadowDomManager = new ShadowDomManager({
+    mutationCb: wrappedMutationEmit,
+    bypassOptions: {
+      blockClass,
+      blockSelector,
+      maskTextClass,
+      maskTextSelector,
+      inlineStylesheet,
+      maskInputOptions,
+      maskTextFn,
+      recordCanvas,
+      slimDOMOptions,
+      iframeManager,
+    },
+  });
+
+  takeFullSnapshot = (isCheckout = false) => {
     wrappedEmit(
       wrapEvent({
         type: EventType.Meta,
@@ -200,13 +235,19 @@ function record<T = eventWithTime>(
     const [node, idNodeMap] = snapshot(document, {
       blockClass,
       blockSelector,
+      maskTextClass,
+      maskTextSelector,
       inlineStylesheet,
       maskAllInputs: maskInputOptions,
+      maskTextFn,
       slimDOM: slimDOMOptions,
       recordCanvas,
       onSerialize: (n) => {
         if (isIframeINode(n)) {
           iframeManager.addIframe(n);
+        }
+        if (hasShadowRoot(n)) {
+          shadowDomManager.addShadowRoot(n.shadowRoot, document);
         }
       },
       onIframeLoad: (iframe, childSn) => {
@@ -244,7 +285,7 @@ function record<T = eventWithTime>(
       }),
     );
     mutationBuffers.forEach((buf) => buf.unlock()); // generate & emit any mutations that happened during snapshotting, as can now apply against the newly built mirror
-  }
+  };
 
   try {
     const handlers: listenerHandler[] = [];
@@ -262,16 +303,7 @@ function record<T = eventWithTime>(
     const observe = (doc: Document) => {
       return initObservers(
         {
-          mutationCb: (m) =>
-            wrappedEmit(
-              wrapEvent({
-                type: EventType.IncrementalSnapshot,
-                data: {
-                  source: IncrementalSource.Mutation,
-                  ...m,
-                },
-              }),
-            ),
+          mutationCb: wrappedMutationEmit,
           mousemoveCb: (positions, source) =>
             wrappedEmit(
               wrapEvent({
@@ -374,6 +406,8 @@ function record<T = eventWithTime>(
             ),
           blockClass,
           ignoreClass,
+          maskTextClass,
+          maskTextSelector,
           maskInputOptions,
           inlineStylesheet,
           sampling,
@@ -381,10 +415,12 @@ function record<T = eventWithTime>(
           collectFonts,
           doc,
           maskInputFn,
+          maskTextFn,
           logOptions,
           blockSelector,
           slimDOMOptions,
           iframeManager,
+          shadowDomManager,
         },
         hooks,
       );
@@ -446,6 +482,13 @@ record.addCustomEvent = <T>(tag: string, payload: T) => {
 
 record.freezePage = () => {
   mutationBuffers.forEach((buf) => buf.freeze());
+};
+
+record.takeFullSnapshot = (isCheckout?: boolean) => {
+  if (!takeFullSnapshot) {
+    throw new Error('please take full snapshot after start recording');
+  }
+  takeFullSnapshot(isCheckout);
 };
 
 export default record;

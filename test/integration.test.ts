@@ -72,8 +72,10 @@ describe('record integration tests', function (this: ISuite) {
         emit: event => {          
           window.snapshots.push(event);
         },
+        maskTextSelector: ${JSON.stringify(options.maskTextSelector)},
         maskAllInputs: ${options.maskAllInputs},
         maskInputOptions: ${JSON.stringify(options.maskAllInputs)},
+        maskTextFn: ${options.maskTextFn},
         recordCanvas: ${options.recordCanvas},
         recordLog: ${options.recordLog},
       });
@@ -420,5 +422,90 @@ describe('record integration tests', function (this: ISuite) {
     await page.waitFor(500);
     const snapshots = await page.evaluate('window.snapshots');
     assertSnapshot(snapshots, __filename, 'iframe');
+  });
+
+  it('should record shadow DOM', async () => {
+    const page: puppeteer.Page = await this.browser.newPage();
+    await page.goto('about:blank');
+    await page.setContent(getHtml.call(this, 'shadow-dom.html'));
+
+    await page.evaluate(() => {
+      const sleep = (ms: number) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
+
+      const el = document.querySelector('.my-element') as HTMLDivElement;
+      const shadowRoot = el.shadowRoot as ShadowRoot;
+      shadowRoot.appendChild(document.createElement('p'));
+      sleep(1)
+        .then(() => {
+          shadowRoot.lastChild!.appendChild(document.createElement('p'));
+          return sleep(1);
+        })
+        .then(() => {
+          const firstP = shadowRoot.querySelector('p') as HTMLParagraphElement;
+          shadowRoot.removeChild(firstP);
+          return sleep(1);
+        })
+        .then(() => {
+          (shadowRoot.lastChild!.childNodes[0] as HTMLElement).innerText = 'hi';
+          return sleep(1);
+        })
+        .then(() => {
+          (shadowRoot.lastChild!.childNodes[0] as HTMLElement).innerText =
+            '123';
+        });
+    });
+    await page.waitFor(50);
+
+    const snapshots = await page.evaluate('window.snapshots');
+    assertSnapshot(snapshots, __filename, 'shadow-dom');
+  });
+
+  it('should mask texts', async () => {
+    const page: puppeteer.Page = await this.browser.newPage();
+    await page.goto('about:blank');
+    await page.setContent(
+      getHtml.call(this, 'mask-text.html', {
+        maskTextSelector: '[data-masking="true"]',
+      }),
+    );
+
+    const snapshots = await page.evaluate('window.snapshots');
+    assertSnapshot(snapshots, __filename, 'mask-text');
+  });
+
+  it('should mask texts using maskTextFn', async () => {
+    const page: puppeteer.Page = await this.browser.newPage();
+    await page.goto('about:blank');
+    await page.setContent(
+      getHtml.call(this, 'mask-text.html', {
+        maskTextSelector: '[data-masking="true"]',
+        maskTextFn: (t: string) => t.replace(/[a-z]/g, '*'),
+      }),
+    );
+
+    const snapshots = await page.evaluate('window.snapshots');
+    assertSnapshot(snapshots, __filename, 'mask-text-fn');
+  });
+
+  it('can mask character data mutations', async () => {
+    const page: puppeteer.Page = await this.browser.newPage();
+    await page.goto('about:blank');
+    await page.setContent(getHtml.call(this, 'mutation-observer.html'));
+
+    await page.evaluate(() => {
+      const li = document.createElement('li');
+      const ul = document.querySelector('ul') as HTMLUListElement;
+      const p = document.querySelector('p') as HTMLParagraphElement;
+      [li, p].forEach((element) => {
+        element.className = 'rr-mask';
+      });
+      ul.appendChild(li);
+      li.innerText = 'new list item';
+      p.innerText = 'mutated';
+    });
+
+    const snapshots = await page.evaluate('window.snapshots');
+    assertSnapshot(snapshots, __filename, 'mask-character-data');
   });
 });
