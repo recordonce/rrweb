@@ -1,6 +1,6 @@
 {
   "name": "@recordonce/rrweb",
-  "version": "0.9.14",
+  "version": "0.9.15-beta.0",
   "description": "record and replay the web",
   "scripts": {
     "prepare": "npm run prepack",
