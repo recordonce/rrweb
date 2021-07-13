@@ -168,7 +168,6 @@ You may find some contents on the webpage which are not willing to be recorded, 
 - All text of elements with the class name `.rr-mask` and their children will be masked.
 - `input[type="password"]` will be masked by default.
 - Mask options to mask the content in input elements.
-- `input[type="password"]` will be masked as default.
 
 #### Checkout
 
