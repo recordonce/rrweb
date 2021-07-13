@@ -144,6 +144,7 @@ export declare type recordOptions<T> = {
     packFn?: PackFn;
     sampling?: SamplingStrategy;
     recordCanvas?: boolean;
+    userTriggeredOnInput?: boolean;
     collectFonts?: boolean;
     plugins?: RecordPlugin[];
     mousemoveWait?: number;
@@ -171,6 +172,7 @@ export declare type observerParam = {
     fontCb: fontCallback;
     sampling: SamplingStrategy;
     recordCanvas: boolean;
+    userTriggeredOnInput: boolean;
     collectFonts: boolean;
     slimDOMOptions: SlimDOMOptions;
     doc: Document;
@@ -211,16 +213,19 @@ export declare type textMutation = {
     id: number;
     value: string | null;
 };
+export declare type styleAttributeValue = {
+    [key: string]: [string, string] | string | false;
+};
 export declare type attributeCursor = {
     node: Node;
     attributes: {
-        [key: string]: string | null;
+        [key: string]: string | styleAttributeValue | null;
     };
 };
 export declare type attributeMutation = {
     id: number;
     attributes: {
-        [key: string]: string | null;
+        [key: string]: string | styleAttributeValue | null;
     };
 };
 export declare type removedNodeMutation = {
@@ -309,7 +314,7 @@ export declare type viewportResizeCallback = (d: viewportResizeDimension) => voi
 export declare type inputValue = {
     text: string;
     isChecked: boolean;
-    userTriggered: boolean;
+    userTriggered?: boolean;
 };
 export declare type inputCallback = (v: inputValue & {
     id: number;
@@ -364,6 +369,7 @@ export declare type playerConfig = {
     triggerFocus: boolean;
     UNSAFE_replayCanvas: boolean;
     pauseAnimation?: boolean;
+    userTriggeredOnInput: boolean;
     mouseTail: boolean | {
         duration?: number;
         lineCap?: string;
