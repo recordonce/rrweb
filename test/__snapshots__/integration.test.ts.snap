@@ -1356,7 +1356,6 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"t\\",
       \\"isChecked\\": false,
-      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -1366,7 +1365,6 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"te\\",
       \\"isChecked\\": false,
-      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -1376,7 +1374,6 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"tes\\",
       \\"isChecked\\": false,
-      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -1386,7 +1383,6 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"test\\",
       \\"isChecked\\": false,
-      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -1436,7 +1432,6 @@ exports[`form 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"on\\",
       \\"isChecked\\": true,
-      \\"userTriggered\\": true,
       \\"id\\": 27
     }
   },
@@ -3634,7 +3629,6 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"*\\",
       \\"isChecked\\": false,
-      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -3644,7 +3638,6 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"**\\",
       \\"isChecked\\": false,
-      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -3654,7 +3647,6 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"***\\",
       \\"isChecked\\": false,
-      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -3664,7 +3656,6 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"****\\",
       \\"isChecked\\": false,
-      \\"userTriggered\\": true,
       \\"id\\": 22
     }
   },
@@ -3714,7 +3705,6 @@ exports[`mask 1`] = `
       \\"source\\": 5,
       \\"text\\": \\"on\\",
       \\"isChecked\\": true,
-      \\"userTriggered\\": true,
       \\"id\\": 27
     }
   },
